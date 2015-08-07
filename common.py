@@ -18,7 +18,14 @@ def getGCF(pt, power, corrlength):
 		corrlength: numpy.array(1)
 				correlation length parameter
 	"""
-	x_dim, dim = pt.shape[0], pt.shape[1]
+	# Check the first argument pt
+	x_dim = pt.shape[0]
+	try:
+		dim = pt.shape[1]
+	except IndexError, e:
+		dim = 1
+	else:
+		print "The first argument must be a numpy array"
 
 	assert dim > 0 and dim <= 3
 	assert x_dim > 0
@@ -27,9 +34,12 @@ def getGCF(pt, power, corrlength):
 
 	# compute distance between two points
 	h = np.zeros([x_dim, x_dim])
-	for i in range(2):
+	for i in range(dim):
 		# import pdb;pdb.set_trace()
-		[PT1, PT2] = np.meshgrid(pt[:,i], pt[:,i])
+		if dim == 1:
+			[PT1, PT2] = np.meshgrid(pt, pt)
+		else:
+			[PT1, PT2] = np.meshgrid(pt[:,i], pt[:,i])
 		h = h + (PT1 - PT2)**2
 
 	h = np.sqrt(h)
