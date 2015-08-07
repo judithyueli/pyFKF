@@ -1,5 +1,6 @@
 from __future__ import division # no integer division
 import numpy as np
+from numpy import linalg as LA
 
 def getGCF(pt, power, corrlength):
 	"""Compute the generalized Gaussian covariance matrix of the form:
@@ -24,7 +25,7 @@ def getGCF(pt, power, corrlength):
 		dim = pt.shape[1]
 	except IndexError, e:
 		dim = 1
-	else:
+	except:
 		print "The first argument must be a numpy array"
 
 	assert dim > 0 and dim <= 3
@@ -49,5 +50,29 @@ def getGCF(pt, power, corrlength):
 
 	return Q
 
+def testFun():
+	"""Test functions in common.py"""
+	x1 = np.array([1,2,3])
+	x2 = np.array([[1,2,3],
+            [3,4,5]])
+	p, l = 1, 0.5
+	
+	Q1 = getGCF(x1,p,l)
+	Q2 = getQ(x1,l,p)
+	Q3 = getGCF(x2,p,l)
+	Q4 = getQ(x2,l,p)
 
+	print Q1 == Q2
+	print Q3 == Q4
 
+def getQ(x,l,p):
+		Q = np.zeros((x.shape[0],x.shape[0]))
+		for i in range(len(x)):
+			for j in range(len(x)):
+				h = LA.norm(x[i]-x[j])
+				Q[i][j] = np.exp(h/l)**p
+		
+		return Q
+
+if __name__ == '__main__':
+	testFun()
