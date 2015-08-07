@@ -5,26 +5,33 @@ import sys
 class CO2simulation(object):
     def __init__(self, resolution):
         """
-            x:
+            x:  numpy.array(x_dim,1)
                 current state (CO2 slowness)
-            count:
+            
+            count: int
                 current time step (max = 40)
-            dim_x:
+            
+            x_dim: scalar
                 state dimension
-            resolution: 
+            
+            resolution: string
                 low(59x55), medium(117x109), large(217x234)
+
+            grid: numpy.array(x_dim,dim)
+                (x,y,z) coordinates for each grid block
+
         """
             # Load Vp1.mat, Vp2.mat, Vp3.mat into
             # resolution = 'lows'
         if resolution is 'low':
             Vp_dict = scipy.io.loadmat('./data/Res1.mat')
-            self.dim_x = 59*55
+            self.x_dim = 59*55   
         elif resolution is 'medium':
             Vp_dict = scipy.io.loadmat('./data/Res2.mat')
-            self.dim_x = 117*109
+            self.x_dim = 117*109
         elif resolution is 'high':
             Vp_dict = scipy.io.loadmat('./data/Res3.mat')
-            self.dim_x = 217*234
+            self.x_dim = 217*234
         else:
             print 'select resolution among low, medium and high'
 
@@ -36,8 +43,11 @@ class CO2simulation(object):
           self.x_true.append(x_mtx.flatten('F'))
 
         # load grid information
-        self.x_loc_array = Vp_dict['xc']
-        self.y_loc_array = Vp_dict['yc']
+        x_loc_array = Vp_dict['xc']
+        y_loc_array = Vp_dict['yc']
+        [X,Y] = np.meshgrid(x_loc_array, y_loc_array)
+        X, Y = X.flatten(order = 'F'), Y.flatten(order = 'F')
+        self.grid = np.hstack((X.reshape(len(X),1),Y.reshape(len(Y),1)))
 
         # load sensor measurement operator
         self.H_mtx = Vp_dict['H']
