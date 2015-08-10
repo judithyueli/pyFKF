@@ -44,9 +44,9 @@ def getGCF(pt, power, corrlength):
 		h = h + (PT1 - PT2)**2
 
 	h = np.sqrt(h)
-
+	
 	# compute the covariance matrix
-	Q = np.exp(h/corrlength)**power
+	Q = np.exp(-np.power(h/corrlength,power))
 
 	return Q
 
