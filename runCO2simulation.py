@@ -8,7 +8,7 @@ from HiKF import HiKF
 from numpy import dot, zeros, eye, isscalar
 
 def CO2_kf_filter(CO2, param):
-	"""filter matrices initialization"""
+	"""filter matrices initialization for KF"""
 	try:
 		theta = param.theta
 		Qparam = param.Qparam
@@ -67,7 +67,8 @@ def CO2_filter(CO2,param):
 		#simulation
 		data.append(CO2.move_and_sense())
 		x.append(CO2.x)
-		z = CO2.measurement()
+		z = CO2.extract_data()
+		z = z[-1]
 		#filtering
 		kf.predict()
 #     import pdb;pdb.set_trace()
@@ -80,11 +81,13 @@ def CO2_filter(CO2,param):
 	x_kf = np.array(x_kf)
 	var_kf = np.array(var_kf)
 
-	# def CO2_filter_theta(theta):
-	# 	param.theta = theta
-	# 	kf, x_kf, var_kf = CO2_filter(CO2, param)
-	# 	return kf, x_kf, var_kf
+	return kf, x_kf, var_kf
 
+def CO2_filter_theta(theta):
+	import param
+	CO2 = CO2simulation(param)
+	param.theta = theta
+	kf, x_kf, var_kf = CO2_filter(CO2, param)
 	return kf, x_kf, var_kf
 
 def test_filter(param):
