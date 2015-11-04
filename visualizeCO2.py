@@ -3,9 +3,10 @@
 """
 import numpy as np
 from pylab import *
+import matplotlib.pylab as pylab
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from display_notebook import display_animation
+import os
 
 def getImgParam(param):
     # plot setting for different resolution
@@ -55,10 +56,12 @@ def plotCO2vid(x_list,param):
     plt.show()
 
 def plotCO2map(x,cov,param):
+    """
     # Display a CO2 map
     # x: list of maps
     # param: settings of plots
     # figure()
+    """
     f, (ax1, ax2) = plt.subplots(1,2)
     def vec2map(x):
         x_map = np.reshape(x,(param['ny'],param['nx']), order = 'F')
