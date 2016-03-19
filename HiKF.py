@@ -1,11 +1,6 @@
-# from __future__ import (absolute_import, division, print_function,
-												# unicode_literals)
 import scipy.io
 import numpy as np
 import sys
-
-# from filterpy.common import setter, setter_1d, setter_scalar, dot3
-# from filterpy.stats import multivariate_gaussian
 import numpy as np
 from numpy import dot, zeros, eye, isscalar
 import scipy.linalg as linalg
